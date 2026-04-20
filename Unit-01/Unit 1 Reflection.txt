@@ -1,4 +1,4 @@
-# Unit 1 Reflection
+Unit 1 Reflection
 
 In Unit 1, I learned about the history of the web and the basics of web development. 
 I also learned simple HTML structure, basic formatting tags, and how to create a simple HTML page. 
