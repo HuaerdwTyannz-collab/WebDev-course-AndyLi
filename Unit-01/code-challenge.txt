@@ -1,0 +1,6 @@
+I have completed units 1 and 2. 
+These are basically brand-new knowledge for me. 
+Before starting the course, I had no idea what the structure of a website was like. 
+So at the beginning, I had great difficulty understanding this knowledge. 
+For example, html, b, p, etc. I tried to understand the structure of the website through 
+AI, but I still can't write the code by myself.

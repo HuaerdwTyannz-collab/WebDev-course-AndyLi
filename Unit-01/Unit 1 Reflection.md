@@ -1,3 +1,3 @@
 # Unit 1 Reflection
 
-[Reflect on your journey here]
+[In Unit 1 and 2, I learned more about the basic structure of websites and how design affects the user experience. I practiced looking at layout, colors, fonts, and buttons more carefully instead of only using the site normally. One challenge was explaining design choices clearly in words, because I usually notice them but do not describe them. I solved this by comparing different websites and focusing on simple details like navigation, readability, and organization. These units helped me understand how websites are planned and how good design can make a site easier to use.]
