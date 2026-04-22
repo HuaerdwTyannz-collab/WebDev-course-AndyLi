@@ -1,3 +1,3 @@
 # Unit 4 Reflection
 
-[Reflect on your journey here]
+[Reflect on your journey here]In Unit 4, I learned about accessibility in web design. I learned that a website should be easy for different people to use, including people who cannot see images clearly. One important thing I learned was how to use the alt attribute for images. The alt text helps describe the image and makes the website more accessible. I also learned that headings, clear text, and simple structure can help users understand a webpage better. This unit helped me understand that web design is not only about looking good, but also about making the website useful for everyone.
