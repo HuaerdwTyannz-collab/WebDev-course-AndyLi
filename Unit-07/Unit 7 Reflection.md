@@ -1,3 +1,3 @@
 # Unit 7 Reflection
 
-[Reflect on your journey here]
+[In Unit 7, I learned how web design can be used to solve a real problem and serve a purpose. At first, I felt confused about the United Nations Global Goals because there were many goals and targets, and I did not know how to connect them to a website. I also struggled with design thinking because I thought it was only about making the page look nice. Later, I understood that design thinking means thinking about the audience, the problem, and the message first. I learned that a website can promote an idea, raise awareness, and help a community. I also practiced using clear text, images, and layout to make the message easier to understand. This unit was challenging, but it helped me realize that web design is not only about coding. It can also be used to make something meaningful and useful.]
