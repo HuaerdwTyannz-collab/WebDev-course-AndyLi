@@ -1,3 +1,3 @@
 # Unit 6 Reflection
 
-[Reflect on your journey here]
+[In Unit 6, I learned how feedback and iteration can improve a web page. I learned that testing is an important part of the design thinking process because a website should work well for both the client and the users. By asking classmates and the client for feedback, I could understand what parts of my design were clear and what parts needed improvement. I also learned how to add and style links, including different types of links and how links can make a website more useful. In the polishing lesson, I learned about favicons, styling images, and using span tags to make small design changes. This unit helped me understand that a website is not finished after the first version. Good design needs review, changes, and improvement. In the future, I want to use feedback more carefully and make my websites cleaner, easier to use, and more professional.]
