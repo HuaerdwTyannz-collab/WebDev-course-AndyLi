@@ -1,3 +1,3 @@
 # Unit 5 Reflection
 
-[Reflect on your journey here]
+[In Unit 5, I learned the basics of CSS and how it can change the style of a web page. Before this unit, I mostly focused on HTML structure, but now I understand that CSS controls the design, such as color, font size, spacing, and layout. I also learned three different ways to use CSS: inline CSS, internal CSS, and external CSS. Inline CSS is useful for quick changes, internal CSS is good for one page, and external CSS is better for organizing a full website. I also learned about cascading CSS, which means the browser decides which style rule has priority when there are different rules. This unit helped me understand how websites become more visually attractive and easier to read. In the future, I want to use external CSS more because it keeps my code cleaner and makes my website easier to update.]

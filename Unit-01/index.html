@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pH & pOH 高难度计算</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.6;color:#1a1a1a;background:#f5f5f2;padding:16px}
+.root{max-width:720px;margin:0 auto}
+h1{font-size:18px;font-weight:500;margin-bottom:16px;color:#1a1a1a}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:7px 14px;border:1px solid #ddd;border-radius:20px;cursor:pointer;font-size:13px;background:#fff;color:#666}
+.tab:hover{border-color:#999;color:#1a1a1a}
+.tab.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.sec{display:none}.sec.on{display:block}
+.card{padding:18px 20px;background:#fff;border:1px solid #e5e5e5;border-radius:12px;margin-bottom:14px}
+.card-t{font-weight:500;font-size:15px;margin-bottom:12px}
+.lbl{font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:#888;margin-bottom:5px;margin-top:10px}
+.formula{font-family:'Menlo','Courier New',monospace;font-size:13px;background:#f5f5f2;padding:10px 14px;border-radius:6px;margin:8px 0;line-height:2}
+.step{margin:8px 0;padding:11px 14px;background:#f5f5f2;border-radius:8px;font-size:14px}
+.step-row{display:flex;align-items:flex-start;gap:10px}
+.sn{display:inline-flex;width:22px;height:22px;background:#1a1a1a;color:#fff;border-radius:50%;font-size:11px;font-weight:500;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.warn{padding:10px 14px;background:#fff9e6;border-radius:6px;font-size:13px;color:#7a5c00;margin:8px 0;border:1px solid #f0d060}
+.info{padding:10px 14px;background:#e8f0fb;border-radius:6px;font-size:13px;color:#1a4fa0;margin:8px 0}
+.ok{padding:10px 14px;background:#e8f6ee;border-radius:6px;font-size:13px;color:#1a6a3a;margin:8px 0}
+.ice{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;font-family:'Menlo','Courier New',monospace}
+.ice th,.ice td{border:1px solid #ddd;padding:6px 10px;text-align:center}
+.ice th{background:#f5f5f2;font-weight:500;font-family:inherit;font-size:12px}
+.ice .hl{background:#e8f0fb;color:#1a4fa0;font-weight:500}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+hr{border:none;border-top:1px solid #eee;margin:14px 0}
+ul{padding-left:20px;margin:6px 0}li{margin:4px 0}
+b{font-weight:500}
+select,input[type=number]{padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:13px;background:#fff;font-family:inherit}
+.btn{padding:8px 14px;border:1px solid #ddd;border-radius:6px;font-size:13px;cursor:pointer;background:#fff;font-family:inherit}
+.btn:hover{background:#f5f5f2}
+.btnp{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.btnp:hover{background:#333}
+.res-area{margin-top:12px;padding:14px;background:#f5f5f2;border-radius:8px;display:none}
+.big{font-size:22px;font-weight:500;font-family:'Menlo','Courier New',monospace;margin-bottom:4px}
+.sub{font-size:12px;color:#666;margin-top:4px}
+.inp-row{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}
+.inp-row label{font-size:13px;color:#555;white-space:nowrap}
+table.ref{width:100%;border-collapse:collapse;font-size:13px}
+table.ref th{background:#f5f5f2;border:1px solid #ddd;padding:6px 8px;text-align:left;font-weight:500;font-size:12px}
+table.ref td{border:1px solid #ddd;padding:5px 8px}
+</style>
+</head>
+<body>
+<div class="root">
+<h1>pH & pOH 高难度计算 — 全攻略</h1>
+
+<div class="tabs">
+  <button class="tab on" data-tab="t0">① 基础公式</button>
+  <button class="tab" data-tab="t1">② 强酸/强碱</button>
+  <button class="tab" data-tab="t2">③ 弱酸 ICE表</button>
+  <button class="tab" data-tab="t3">④ 弱碱 ICE表</button>
+  <button class="tab" data-tab="t4">⑤ Salt水解</button>
+  <button class="tab" data-tab="t5">⑥ 过量混合</button>
+  <button class="tab" data-tab="t6">⑦ 计算器</button>
+</div>
+
+<!-- TAB 0: 基础公式 -->
+<div id="t0" class="sec on">
+  <div class="card">
+    <div class="card-t">核心公式体系（必背）</div>
+    <div class="grid2">
+      <div><div class="lbl">pH 系</div><div class="formula">pH = −log[H₃O⁺]<br>[H₃O⁺] = 10⁻ᵖᴴ</div></div>
+      <div><div class="lbl">pOH 系</div><div class="formula">pOH = −log[OH⁻]<br>[OH⁻] = 10⁻ᵖᴼᴴ</div></div>
+    </div>
+    <div class="formula" style="text-align:center;font-size:15px;margin-top:8px">
+      pH + pOH = 14.00 &nbsp;(at 25°C)<br>
+      [H₃O⁺][OH⁻] = Kw = 1.0 × 10⁻¹⁴
+    </div>
+    <div class="warn" style="margin-top:12px">⚠️ <b>有效数字陷阱</b>：pH 的<b>小数位数</b> = 浓度的有效数字位数。<br>
+    例：[H₃O⁺] = 3.5×10⁻³ M（2位有效数字）→ pH = 2.46（保留2位小数）</div>
+  </div>
+  <div class="card">
+    <div class="card-t">pH 量级感（考试直觉）</div>
+    <table class="ref">
+      <tr><th>pH</th><th>[H₃O⁺] M</th><th>[OH⁻] M</th><th>pOH</th><th>典型物质</th></tr>
+      <tr><td style="color:#c00">0</td><td>1.0</td><td>1.0×10⁻¹⁴</td><td>14</td><td>1.0 M 强酸</td></tr>
+      <tr><td style="color:#c00">1</td><td>0.1</td><td>1.0×10⁻¹³</td><td>13</td><td>0.1 M 强酸</td></tr>
+      <tr><td style="color:#c00">3</td><td>1.0×10⁻³</td><td>1.0×10⁻¹¹</td><td>11</td><td>弱酸溶液</td></tr>
+      <tr><td>7</td><td>1.0×10⁻⁷</td><td>1.0×10⁻⁷</td><td>7</td><td>纯水 25°C</td></tr>
+      <tr><td style="color:#1a6a3a">11</td><td>1.0×10⁻¹¹</td><td>1.0×10⁻³</td><td>3</td><td>弱碱溶液</td></tr>
+      <tr><td style="color:#1a6a3a">13</td><td>1.0×10⁻¹³</td><td>0.1</td><td>1</td><td>0.1 M NaOH</td></tr>
+    </table>
+    <div class="info" style="margin-top:10px"><b>规律</b>：pH 每差 1 单位，[H₃O⁺] 相差 <b>10 倍</b>。<br>
+    "pH 从 3 变到 5" → [H₃O⁺] 变小 100 倍，[OH⁻] 变大 100 倍。</div>
+  </div>
+</div>
+
+<!-- TAB 1: 强酸强碱 -->
+<div id="t1" class="sec">
+  <div class="card">
+    <div class="card-t">强酸 pH（100% 电离）</div>
+    <div class="lbl">六大强酸（必背）</div>
+    <div class="formula">HCl · HBr · HI · HNO₃ · HClO₄ · H₂SO₄（第一步）</div>
+    <div class="lbl" style="margin-top:14px">例：0.025 M HBr 的 pH 和 [OH⁻]</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>HBr → H⁺ + Br⁻ &nbsp; 100% 电离<br>[H₃O⁺] = 0.025 M</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>pH = −log(0.025) = −log(2.5×10⁻²) = 2 − log 2.5 = 2 − 0.40 = <b>1.60</b></div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div>pOH = 14 − 1.60 = 12.40 &nbsp;→&nbsp; [OH⁻] = 10⁻¹²·⁴⁰ = <b>4.0×10⁻¹³ M</b></div></div></div>
+    <div class="warn">⚠️ H₂SO₄ 高难题：第一步完全电离（Ka₂ = 0.012 也算弱），BC12 一般只考第一步。</div>
+  </div>
+  <div class="card">
+    <div class="card-t">强碱 pH</div>
+    <div class="lbl">强碱</div>
+    <div class="formula">LiOH, NaOH, KOH, Ca(OH)₂, Sr(OH)₂, Ba(OH)₂</div>
+    <div class="warn">⚠️ Ca(OH)₂, Sr(OH)₂, Ba(OH)₂ 每 1 mol 给出 <b>2 mol OH⁻</b>！</div>
+    <div class="lbl" style="margin-top:10px">例：0.025 M NaOH</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>[OH⁻] = 0.025 M → pOH = 1.60 → pH = 14 − 1.60 = <b>12.40</b></div></div></div>
+    <hr>
+    <div class="lbl">例：0.010 M Sr(OH)₂</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>Sr(OH)₂ → Sr²⁺ + <b>2</b>OH⁻ &nbsp;→&nbsp; [OH⁻] = <b>2</b> × 0.010 = 0.020 M</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>pOH = −log(0.020) = 1.70 &nbsp;→&nbsp; pH = <b>12.30</b></div></div></div>
+    <hr>
+    <div class="lbl">逆向高难度：已知 pH = 12.00，求 Sr(OH)₂ 浓度</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>pOH = 14 − 12.00 = 2.00 &nbsp;→&nbsp; [OH⁻] = 10⁻² = 0.010 M</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>[Sr(OH)₂] = [OH⁻] / 2 = 0.010 / 2 = <b>0.0050 M</b></div></div></div>
+  </div>
+</div>
+
+<!-- TAB 2: 弱酸 ICE -->
+<div id="t2" class="sec">
+  <div class="card">
+    <div class="card-t">弱酸 ICE 表法（高难度核心）</div>
+    <div class="info">弱酸只<b>部分电离</b>，必须 ICE 表。Ka = [H₃O⁺][A⁻] / [HA]</div>
+    <div class="lbl" style="margin-top:12px">例 A（可近似）：0.100 M CH₃COOH, Ka = 1.8×10⁻⁵</div>
+    <table class="ice">
+      <tr><th></th><th>CH₃COOH</th><th>⇌</th><th>H₃O⁺</th><th>+</th><th>CH₃COO⁻</th></tr>
+      <tr><th>I</th><td>0.100</td><td></td><td>≈0</td><td></td><td>0</td></tr>
+      <tr><th>C</th><td>−x</td><td></td><td>+x</td><td></td><td>+x</td></tr>
+      <tr class="hl"><th>E</th><td>0.100−x</td><td></td><td>x</td><td></td><td>x</td></tr>
+    </table>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div><b>近似判断</b>：[HA]₀/Ka = 0.100/1.8×10⁻⁵ = 5556 &gt; 1000 ✓ 可近似<br>令 0.100 − x ≈ 0.100</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>1.8×10⁻⁵ = x²/0.100 &nbsp;→&nbsp; x² = 1.8×10⁻⁶<br>x = <b>1.34×10⁻³ M</b> = [H₃O⁺]</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div>验证：1.34×10⁻³/0.100 = 1.34% &lt; 5% ✓</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">4</span><div>pH = −log(1.34×10⁻³) = <b>2.87</b></div></div></div>
+    <hr>
+    <div class="lbl">例 B（不能近似，用二次方程）：0.0100 M HF, Ka = 3.5×10⁻⁴</div>
+    <div class="warn">[HA]/Ka = 0.0100/3.5×10⁻⁴ = 28.6 &lt; 1000 → <b>必须用二次方程</b></div>
+    <div class="formula">x² + Ka·x − Ka·[HA]₀ = 0<br>x = ( −Ka + √(Ka² + 4·Ka·[HA]₀) ) / 2</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>x = (−3.5×10⁻⁴ + √((3.5×10⁻⁴)² + 4×3.5×10⁻⁴×0.0100)) / 2<br>= (−3.5×10⁻⁴ + √(1.225×10⁻⁷ + 1.4×10⁻⁵)) / 2<br>= (−3.5×10⁻⁴ + √1.413×10⁻⁵) / 2<br>= (−3.5×10⁻⁴ + 3.759×10⁻³) / 2<br>= <b>1.70×10⁻³ M</b></div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>pH = −log(1.70×10⁻³) = <b>2.77</b></div></div></div>
+    <div class="warn">⚠️ 若强行近似 x≈√(Ka×C) = 1.87×10⁻³，误差 10%，超标！</div>
+    <hr>
+    <div class="lbl">从 pH 反推 Ka（高频考题）</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>pH 已知 → [H₃O⁺] = 10⁻ᵖᴴ = x</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>[A⁻] = x（与 [H₃O⁺] 相等）<br>[HA]eq = [HA]₀ − x &nbsp;<b>（x 已知，不能近似分母！）</b></div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div>Ka = x² / ([HA]₀ − x)</div></div></div>
+  </div>
+</div>
+
+<!-- TAB 3: 弱碱 -->
+<div id="t3" class="sec">
+  <div class="card">
+    <div class="card-t">弱碱 ICE 表法</div>
+    <div class="formula">Kb = [BH⁺][OH⁻] / [B]</div>
+    <div class="lbl" style="margin-top:10px">例：0.10 M NH₃，Kb = 1.8×10⁻⁵ → pH?</div>
+    <table class="ice">
+      <tr><th></th><th>NH₃</th><th>⇌</th><th>NH₄⁺</th><th>+</th><th>OH⁻</th></tr>
+      <tr><th>I</th><td>0.10</td><td></td><td>0</td><td></td><td>≈0</td></tr>
+      <tr><th>C</th><td>−x</td><td></td><td>+x</td><td></td><td>+x</td></tr>
+      <tr class="hl"><th>E</th><td>0.10−x</td><td></td><td>x</td><td></td><td>x</td></tr>
+    </table>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>0.10/1.8×10⁻⁵ = 5556 &gt; 1000 → 近似 ✓<br>x = √(Kb×C) = √(1.8×10⁻⁵×0.10) = <b>1.34×10⁻³ M = [OH⁻]</b></div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>pOH = −log(1.34×10⁻³) = 2.87<br>pH = 14 − 2.87 = <b>11.13</b></div></div></div>
+    <hr>
+    <div class="lbl">从 pH 反推 Kb（WR#8 类型题，高难度）</div>
+    <div class="info">核心逻辑：pH 已知 → x 精确已知 → 代入求 Kb，<b>分母不能近似</b>。</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>pOH = 14 − pH → [OH⁻] = 10⁻ᵖᴼᴴ = x</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>[B]eq = [B]₀ − x &nbsp;（不能省略 x！）</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div>Kb = x² / ([B]₀ − x)</div></div></div>
+    <div class="lbl" style="margin-top:12px">完整例子：0.0200 M 甲胺，pH = 11.40，求 Kb</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>pOH = 14 − 11.40 = 2.60 &nbsp;→&nbsp; [OH⁻] = 10⁻²·⁶⁰ = 2.51×10⁻³ M</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>[甲胺]eq = 0.0200 − 0.00251 = 0.01749 M</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div>Kb = (2.51×10⁻³)² / 0.01749<br>= 6.30×10⁻⁶ / 0.01749 = <b>3.6×10⁻⁴</b></div></div></div>
+    <div class="warn">⚠️ pH = 11.40 小数两位 → 答案取 2 位有效数字 (3.6×10⁻⁴)</div>
+  </div>
+</div>
+
+<!-- TAB 4: Salt -->
+<div id="t4" class="sec">
+  <div class="card">
+    <div class="card-t">Salt 水解 pH（高难度综合型）</div>
+    <table class="ref">
+      <tr><th>阳离子来自</th><th>阴离子来自</th><th>pH</th><th>例子</th></tr>
+      <tr><td>强碱</td><td>强酸</td><td><b>= 7</b></td><td>NaCl, KNO₃</td></tr>
+      <tr><td>强碱</td><td>弱酸</td><td style="color:#1a6a3a"><b>&gt; 7</b></td><td>NaCH₃COO</td></tr>
+      <tr><td>弱碱</td><td>强酸</td><td style="color:#c00"><b>&lt; 7</b></td><td>NH₄Cl</td></tr>
+      <tr><td>弱碱</td><td>弱酸</td><td><b>比 Ka vs Kb</b></td><td>NH₄F, NH₄CN</td></tr>
+    </table>
+    <hr>
+    <div class="lbl">高难度：计算 1.0 M NaCH₃COO 的 pH</div>
+    <div class="info">CH₃COO⁻ 水解：CH₃COO⁻ + H₂O ⇌ CH₃COOH + OH⁻<br>Kb(CH₃COO⁻) = Kw/Ka(CH₃COOH) = 10⁻¹⁴/1.8×10⁻⁵ = <b>5.6×10⁻¹⁰</b></div>
+    <table class="ice">
+      <tr><th></th><th>CH₃COO⁻</th><th>⇌</th><th>CH₃COOH</th><th>+</th><th>OH⁻</th></tr>
+      <tr><th>I</th><td>1.0</td><td></td><td>0</td><td></td><td>0</td></tr>
+      <tr><th>C</th><td>−x</td><td></td><td>+x</td><td></td><td>+x</td></tr>
+      <tr class="hl"><th>E</th><td>1.0−x</td><td></td><td>x</td><td></td><td>x</td></tr>
+    </table>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>5.6×10⁻¹⁰ = x²/1.0 &nbsp;→&nbsp; x = 2.37×10⁻⁵ M = [OH⁻]</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>pOH = 4.63 &nbsp;→&nbsp; pH = 14 − 4.63 = <b>9.37</b></div></div></div>
+    <hr>
+    <div class="lbl">最高难：双离子均水解（NH₄F 类型）</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>NH₄⁺ 水解 Ka(NH₄⁺) = Kw/Kb(NH₃) = 10⁻¹⁴/1.8×10⁻⁵ = <b>5.6×10⁻¹⁰</b>（产 H₃O⁺）</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>F⁻ 水解 Kb(F⁻) = Kw/Ka(HF) = 10⁻¹⁴/3.5×10⁻⁴ = <b>2.9×10⁻¹¹</b>（产 OH⁻）</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div>Ka(NH₄⁺) = 5.6×10⁻¹⁰ &gt; Kb(F⁻) = 2.9×10⁻¹¹ → 产酸 &gt; 产碱 → <b>酸性 pH &lt; 7</b></div></div></div>
+    <div class="ok">只需比较大小，不需计算 pH 精确值。</div>
+  </div>
+</div>
+
+<!-- TAB 5: 过量 -->
+<div id="t5" class="sec">
+  <div class="card">
+    <div class="card-t">混合过量计算（Titration 最高难）</div>
+    <div class="lbl">五步通用框架</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div><b>算 mol</b>：n = C × V（L 或 mL 统一就好）</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div><b>ICF 表</b>（Initial → Change → Final）— 先让酸碱反应</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">3</span><div><b>判断谁过量</b>：过量的决定 pH</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">4</span><div><b>过量浓度</b> = n(过量) / V(总体积)</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">5</span><div><b>转 pH</b></div></div></div>
+    <hr>
+    <div class="lbl">例 A：50.0 mL 4.0 M HCl + 50.0 mL 2.0 M NaOH → pH?</div>
+    <table class="ice">
+      <tr><th></th><th>H⁺ (mol)</th><th>OH⁻ (mol)</th></tr>
+      <tr><th>I</th><td>0.050×4.0 = 0.20</td><td>0.050×2.0 = 0.10</td></tr>
+      <tr><th>C</th><td>−0.10</td><td>−0.10</td></tr>
+      <tr class="hl"><th>F</th><td>0.10 (过量)</td><td>0</td></tr>
+    </table>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>[H⁺] = 0.10 mol / 0.100 L = 1.0 M &nbsp;→&nbsp; pH = <b>0.00</b></div></div></div>
+    <hr>
+    <div class="lbl">例 B：0.060 mol NaOH(s) 加入 1.00 L 0.050 M HCl</div>
+    <table class="ice">
+      <tr><th></th><th>H⁺ (mol)</th><th>OH⁻ (mol)</th></tr>
+      <tr><th>I</th><td>1.00×0.050 = 0.050</td><td>0.060</td></tr>
+      <tr><th>C</th><td>−0.050</td><td>−0.050</td></tr>
+      <tr class="hl"><th>F</th><td>0</td><td>0.010 (过量)</td></tr>
+    </table>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>固体 NaOH 不加体积，V = 1.00 L<br>[OH⁻] = 0.010/1.00 = 0.010 M → pOH = 2.00 → pH = <b>12.00</b></div></div></div>
+    <hr>
+    <div class="lbl">例 C：多元酸 — 15.00 mL 0.100 M H₃PO₄ + 0.100 M NaOH → 完全中和需多少 mL?</div>
+    <div class="step"><div class="step-row"><span class="sn">1</span><div>H₃PO₄ + 3 NaOH → Na₃PO₄ + 3 H₂O（1:3 比例）</div></div></div>
+    <div class="step"><div class="step-row"><span class="sn">2</span><div>n(H₃PO₄) = 0.01500×0.100 = 1.50×10⁻³ mol<br>n(NaOH) 需要 = 3 × 1.50×10⁻³ = 4.50×10⁻³ mol<br>V = 4.50×10⁻³/0.100 = <b>45.0 mL</b></div></div></div>
+    <div class="warn">⚠️ 弱酸 + 强碱恰好中和 → 产物是弱酸共轭碱（碱性盐）→ pH &gt; 7！还要做 hydrolysis ICE 算精确 pH。</div>
+  </div>
+</div>
+
+<!-- TAB 6: 计算器 -->
+<div id="t6" class="sec">
+  <div class="card">
+    <div class="card-t">互动计算器</div>
+    <div class="inp-row">
+      <label>计算类型</label>
+      <select id="sel">
+        <option value="sa">强酸 [C] → pH</option>
+        <option value="sb">强碱 [C] → pH</option>
+        <option value="wa">弱酸 [C] + Ka → pH</option>
+        <option value="wb">弱碱 [C] + Kb → pH</option>
+        <option value="ph2oh">pH → [OH⁻]</option>
+        <option value="poh2h">pOH → [H₃O⁺]</option>
+      </select>
+    </div>
+    <div id="inputs" class="inp-row" style="flex-wrap:wrap;gap:12px"></div>
+    <div style="margin-top:10px"><button class="btn btnp" id="calc">计算</button></div>
+    <div class="res-area" id="res"></div>
+  </div>
+  <div class="card">
+    <div class="card-t">log 速算技巧（考场必备）</div>
+    <div class="formula">log 2 = 0.301 &nbsp;·&nbsp; log 3 = 0.477 &nbsp;·&nbsp; log 5 = 0.699<br>log 4 = 0.602 &nbsp;·&nbsp; log 6 = 0.778 &nbsp;·&nbsp; log 7 = 0.845<br>log 8 = 0.903 &nbsp;·&nbsp; log 9 = 0.954</div>
+    <ul style="margin-top:8px">
+      <li>log(a × 10⁻ⁿ) = log a − n &nbsp;→&nbsp; pH = n − log a</li>
+      <li>例：[H⁺] = 2.5×10⁻³ → pH = 3 − log 2.5 = 3 − 0.40 = <b>2.60</b></li>
+      <li>例：[H⁺] = 3.2×10⁻⁵ → pH = 5 − 0.505 = <b>4.50</b></li>
+      <li>[H⁺] 翻倍 → pH 减少 0.30（= log 2）</li>
+      <li>[H⁺] 变 10 倍 → pH 减少 1.00</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.sec').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById(b.dataset.tab).classList.add('on');
+  });
+});
+
+const sel=document.getElementById('sel');
+const inp=document.getElementById('inputs');
+const res=document.getElementById('res');
+
+function mkF(id,lbl,ph,val){
+  return '<label for="'+id+'">'+lbl+'</label><input id="'+id+'" type="number" placeholder="'+ph+'" value="'+(val||'')+'" step="any" style="width:120px">';
+}
+
+function updateInputs(){
+  const v=sel.value;
+  if(v==='sa')inp.innerHTML=mkF('c','[酸] M','0.025','0.025');
+  else if(v==='sb')inp.innerHTML=mkF('c','[碱] M','0.025','0.025');
+  else if(v==='wa')inp.innerHTML=mkF('c','[弱酸] M','0.100','0.100')+mkF('ka','Ka','1.8e-5','0.000018');
+  else if(v==='wb')inp.innerHTML=mkF('c','[弱碱] M','0.100','0.100')+mkF('kb','Kb','1.8e-5','0.000018');
+  else if(v==='ph2oh')inp.innerHTML=mkF('ph','pH','3.50','3.50');
+  else if(v==='poh2h')inp.innerHTML=mkF('poh','pOH','2.60','2.60');
+  res.style.display='none';
+}
+sel.addEventListener('change',updateInputs);
+updateInputs();
+
+document.getElementById('calc').addEventListener('click',()=>{
+  const v=sel.value;
+  let html='';
+  try{
+    if(v==='sa'){
+      const c=+document.getElementById('c').value;
+      if(!c||c<=0)throw 0;
+      const pH=(-Math.log10(c)).toFixed(2);
+      const pOH=(14-pH).toFixed(2);
+      const ohc=Math.pow(10,-pOH).toExponential(2);
+      html='<div style="font-size:20px;font-weight:500;font-family:monospace;margin-bottom:6px">pH = '+pH+'</div>';
+      html+='<div style="font-size:13px;color:#555">pOH = '+pOH+' &nbsp;·&nbsp; [OH⁻] = '+ohc+' M</div>';
+      html+='<div style="font-size:13px;color:#555;margin-top:8px">步骤：[H₃O⁺] = '+c.toExponential(2)+' M → pH = −log('+c.toExponential(2)+') = '+pH+'</div>';
+    }else if(v==='sb'){
+      const c=+document.getElementById('c').value;
+      if(!c||c<=0)throw 0;
+      const pOH=(-Math.log10(c)).toFixed(2);
+      const pH=(14-pOH).toFixed(2);
+      html='<div style="font-size:20px;font-weight:500;font-family:monospace;margin-bottom:6px">pH = '+pH+'</div>';
+      html+='<div style="font-size:13px;color:#555">pOH = '+pOH+' &nbsp;·&nbsp; [OH⁻] = '+c.toExponential(2)+' M</div>';
+    }else if(v==='wa'){
+      const c0=+document.getElementById('c').value;
+      const Ka=+document.getElementById('ka').value;
+      if(!c0||!Ka||c0<=0||Ka<=0)throw 0;
+      const ratio=c0/Ka;
+      let x,method;
+      if(ratio>1000){
+        x=Math.sqrt(Ka*c0);method='近似法（[C]/Ka='+ratio.toFixed(0)+'&gt;1000）';
+      }else{
+        const disc=Ka*Ka+4*Ka*c0;
+        x=(-Ka+Math.sqrt(disc))/2;method='二次方程（[C]/Ka='+ratio.toFixed(1)+'&lt;1000）';
+      }
+      const pct=(x/c0*100).toFixed(2);
+      const pH=(-Math.log10(x)).toFixed(2);
+      const pOH=(14-pH).toFixed(2);
+      html='<div style="font-size:20px;font-weight:500;font-family:monospace;margin-bottom:6px">pH = '+pH+'</div>';
+      html+='<div style="font-size:13px;color:#555">[H₃O⁺] = '+x.toExponential(2)+' M &nbsp;·&nbsp; 电离度 '+pct+'%</div>';
+      html+='<div style="font-size:13px;color:#555;margin-top:4px">方法：'+method+'</div>';
+      if(+pct>5&&ratio>1000)html+='<div style="padding:8px 12px;background:#fff9e6;border-radius:6px;font-size:13px;color:#7a5c00;margin-top:8px">⚠️ 电离度 '+pct+'%&gt;5%，理论上应用二次方程！</div>';
+    }else if(v==='wb'){
+      const c0=+document.getElementById('c').value;
+      const Kb=+document.getElementById('kb').value;
+      if(!c0||!Kb||c0<=0||Kb<=0)throw 0;
+      const ratio=c0/Kb;
+      let x,method;
+      if(ratio>1000){
+        x=Math.sqrt(Kb*c0);method='近似法（比值'+ratio.toFixed(0)+'&gt;1000）';
+      }else{
+        const disc=Kb*Kb+4*Kb*c0;
+        x=(-Kb+Math.sqrt(disc))/2;method='二次方程（比值'+ratio.toFixed(1)+'&lt;1000）';
+      }
+      const pOH=(-Math.log10(x)).toFixed(2);
+      const pH=(14-pOH).toFixed(2);
+      const pct=(x/c0*100).toFixed(2);
+      html='<div style="font-size:20px;font-weight:500;font-family:monospace;margin-bottom:6px">pH = '+pH+'</div>';
+      html+='<div style="font-size:13px;color:#555">[OH⁻] = '+x.toExponential(2)+' M &nbsp;·&nbsp; pOH = '+pOH+' &nbsp;·&nbsp; 电离度 '+pct+'%</div>';
+      html+='<div style="font-size:13px;color:#555;margin-top:4px">方法：'+method+'</div>';
+    }else if(v==='ph2oh'){
+      const pH=+document.getElementById('ph').value;
+      const pOH=(14-pH).toFixed(2);
+      const oh=Math.pow(10,-pOH).toExponential(2);
+      const h=Math.pow(10,-pH).toExponential(2);
+      html='<div style="font-size:20px;font-weight:500;font-family:monospace;margin-bottom:6px">[OH⁻] = '+oh+' M</div>';
+      html+='<div style="font-size:13px;color:#555">pOH = '+pOH+' &nbsp;·&nbsp; [H₃O⁺] = '+h+' M</div>';
+    }else if(v==='poh2h'){
+      const pOH=+document.getElementById('poh').value;
+      const pH=(14-pOH).toFixed(2);
+      const h=Math.pow(10,-pH).toExponential(2);
+      const oh=Math.pow(10,-pOH).toExponential(2);
+      html='<div style="font-size:20px;font-weight:500;font-family:monospace;margin-bottom:6px">[H₃O⁺] = '+h+' M</div>';
+      html+='<div style="font-size:13px;color:#555">pH = '+pH+' &nbsp;·&nbsp; [OH⁻] = '+oh+' M</div>';
+    }
+  }catch(e){
+    html='<span style="color:#c00">请输入有效正数</span>';
+  }
+  res.innerHTML=html;
+  res.style.display='block';
+});
+</script>
+</body>
+</html>
