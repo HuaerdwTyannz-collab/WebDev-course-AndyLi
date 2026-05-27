@@ -1,0 +1,54 @@
+<head>
+  <title>Pet Tip JavaScript</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4efe6;
+      text-align: center;
+      padding: 40px;
+    }
+
+    button {
+      background-color: #5b8c5a;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #petTip {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Pet Care Tip Generator</h1>
+
+  <p>Click the button to get a random pet care tip.</p>
+
+  <button onclick="showTip()">Show Pet Tip</button>
+
+  <p id="petTip">Your tip will appear here.</p>
+
+  <script>
+    function showTip() {
+      let tips = [
+        "Give your pet clean water every day.",
+        "Brush your pet to keep its fur healthy.",
+        "Take your pet to the vet for checkups.",
+        "Play with your pet to keep it active.",
+        "Give your pet a safe and comfortable place to sleep."
+      ];
+
+      let randomNumber = Math.floor(Math.random() * tips.length);
+
+      document.getElementById("petTip").innerHTML = tips[randomNumber];
+    }
+  </script>
+</body>
